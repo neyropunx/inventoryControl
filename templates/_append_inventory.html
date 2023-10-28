@@ -1,0 +1,19 @@
+{% block modal_body %}
+    <div class="container mt-5">
+        <div>
+            {% for prod in product %}
+                <div>Наименование: {{ prod.name }}</div>
+                <div>Склад: {{ prod.locations_name }}</div>
+                <div>Количество: {{ prod.quantity }}</div>
+            {% endfor %}
+        </div>
+    </div>
+    <label>Локация</label><br />
+    <select id="location-id" class="form-select" aria-label="Пример выбора по умолчанию">
+        {% for location in locations %}
+            <option value={{ location.id }}>{{ location.name }}</option>
+        {% endfor %}
+    </select>
+    <label>Количество</label><br />
+    <input id="quantity" class="form-control" type="number" min="0"><br />
+{% endblock %}

@@ -1,0 +1,18 @@
+{% block modal_body %}
+    <div class="container mt-5">
+        <div class="container">
+            {% for el in locations %}
+            <div class="row">
+                <div class="col">
+                    <h4>{{ el.name }}</h4>
+                </div>
+                <div class="col">
+                    <button id="remove-button" type="button" class="btn btn-danger" onclick=remove_location({{ el.id }})>Удалить</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <label>Наименование</label><br />
+        <input id="location_name" type="text" ><br />
+    </div>
+{% endblock %}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS v5.3.2 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+        crossorigin="anonymous">
+
+    {% block script_head %}{% endblock %}
+    {% block title %}{% endblock %}
+</head>
+
+<div class="modal fade" id="baseModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="baseModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="baseModalLabel">Новое сообщение</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+              <button id="footer-button" type="button" class="btn btn-primary">Применить</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick=updateTable()>Закрыть</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<body>
+    <header class="d-flex justify-content-around py-3">
+      <div class="col-md-3 mb-2 mb-md-0">
+        <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+          <h2>Управление складом</h2>
+        </a>
+      </div>
+        <ul class="nav nav-pills d-flex justify-content-end">
+            <button type="button" class="btn btn-primary ms-3" 
+                data-bs-toggle="modal" data-bs-target="#baseModal" data-bs-whatever="append_location">Добавление локации</button>
+            <button type="button" class="btn btn-primary ms-3" 
+                data-bs-toggle="modal" data-bs-target="#baseModal" data-bs-whatever="append_product">Добавление товара</button>
+        </ul>
+    </header>
+
+    <main>
+        <div class="container sticky-top d-sm-flex w-50 p-2">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Поиск</span>
+                <input id="product-name" class="form-control" type="text" aria-describedby="inputGroup-sizing-default" placeholder="Наименование товара">
+                <button class="btn btn-primary btn-sm" type="text" onclick="searchProduct()">Найти</button>
+            </div>
+        </div>
+        <div id="checkbox-locations" class="container sticky-top d-flex justify-content-center w-50 p-2">
+            <h6>Фильтр по складу</h6>
+            {% for location in locations %}
+                <input type="checkbox" name="{{ location.name }}" search-location-id={{ location.id }}>
+                <label for="{{ location.name }}">{{ location.name }}</label>
+            {% endfor %}
+        </div>
+
+        <div id="main_table" class="container">
+          <table id="product_table" class="table table-hover">
+              <thead>
+                  <tr>
+                      <th scope="col" id="0">#</th>
+                      <th scope="col" id="1">Наименование</th>
+                      <th scope="col" id="2">Описание</th>
+                      <th scope="col" id="3">Цена</th>
+                      <th scope="col" id="4">Локация</th>
+                      <th scope="col" id="5">Количество</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for product in products %}
+                      <tr>
+                          <th scope="row">{{ product.id }}</th>
+                          <td scope="row">{{ product.name }}</td>
+                          <td scope="row">{{ product.description }}</td>
+                          <td scope="row">{{ product.price }}</td>
+                          <td scope="row">Локация:<br /> 
+                              {% set locations = product.locations.split(',') %}
+                              {% for location in locations %}
+                              {{ location }}<br /> 
+                              {% endfor %}
+                          </td>
+                          <td scope="row">Количество:<br /> 
+                              {% set quantitys = product.quantity.split(',') %}
+                              {% for quantity in quantitys %}
+                              {{ quantity }}<br /> 
+                              {% endfor %}
+                          </td>                    
+                          <td>
+                          <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#baseModal" data-bs-whatever="append_inventory"
+                              product-id={{ product.id }}>Добавить на склад</button><br />
+                          <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#baseModal" data-bs-whatever="remove_inventory"
+                              product-id={{ product.id }}>Удалить со склада</button>
+                          </td>
+                      </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      </div>
+    </main>
+
+    <footer>
+        {% block footer %}{% endblock %}
+    </footer>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" 
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" 
+        crossorigin="anonymous">
+    </script>
+    
+    <!-- jQuery 3.7.1 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous">
+    </script>
+
+    <script src="{{ url_for('static', filename='modal_script.js') }}"></script>
+    <script src="{{ url_for('static', filename='append_scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='remove_scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='sort_search_scripts.js') }}"></script>
+    {% block script_footer %}{% endblock %}
+</body>
+
+</html>

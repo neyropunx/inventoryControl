@@ -1,0 +1,15 @@
+{% block modal_body %}
+    <div class="container mt-5">
+        <input id="product_name" class="form-control"name="product_name" type="text" placeholder="Наименование"><br />
+        <textarea id="product_description" class="form-control" name="product_description" placeholder="Описание" cols="22"></textarea><br />
+        <input id="product_price" class="form-control" name="product_price" type="number" placeholder="Цена"><br />
+        <label>Локация</label><br />
+        <select id="location_id" class="form-select" name="location_id" aria-label="Пример выбора по умолчанию">
+            {% for el in locations %}
+                <option value={{ el.id }}>{{ el.name }}</option>
+            {% endfor %}
+        </select>
+        <label>Количество</label><br />
+        <input id="quantity" class="form-control" type="number" min="0"><br />
+    </div>
+{% endblock %}

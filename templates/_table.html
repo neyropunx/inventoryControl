@@ -1,0 +1,38 @@
+<thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col" id="0" onclick="sortTable(0)">Наименование</th>
+        <th scope="col" id="1" onclick="sortTable(1)">Описание</th>
+        <th scope="col" id="2" onclick="sortTable(2)">Цена</th>
+        <th scope="col" id="3">Локация</th>
+        <th scope="col" id="4" onclick="sortTable(4)">Количество</th>
+    </tr>
+</thead>
+<tbody>
+    {% for product in products %}
+        <tr>
+            <th scope="row">{{ product.id }}</th>
+            <td scope="row">{{ product.name }}</td>
+            <td scope="row">{{ product.description }}</td>
+            <td scope="row">{{ product.price }}</td>
+            <td scope="row">Локация:<br /> 
+                {% set locations = product.locations.split(',') %}
+                {% for location in locations %}
+                {{ location }}<br /> 
+                {% endfor %}
+            </td>
+            <td scope="row">Количество:<br /> 
+                {% set quantitys = product.quantity.split(',') %}
+                {% for quantity in quantitys %}
+                {{ quantity }}<br /> 
+                {% endfor %}
+            </td>                    
+            <td>
+            <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#baseModal" data-bs-whatever="append_inventory"
+                product-id={{ product.id }}>Добавить на склад</button><br />
+            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#baseModal" data-bs-whatever="remove_inventory"
+                product-id={{ product.id }}>Удалить со склада</button>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
